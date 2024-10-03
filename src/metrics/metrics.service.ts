@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { Counter, Gauge, Registry } from 'prom-client';
+import { Counter, Gauge, Registry, collectDefaultMetrics } from 'prom-client';
 import * as process from 'process';
 
 @Injectable()
@@ -7,7 +7,7 @@ export class MetricsService implements OnModuleInit, OnModuleDestroy {
   public serverUptime: Gauge<string>;
   public requestCount: Counter<string>;
   public errorCount: Counter<string>;
-  private intervalId: number; // Change type to number
+  private intervalId: number;
 
   constructor(private readonly registry: Registry) {
     this.serverUptime = new Gauge({
@@ -30,13 +30,16 @@ export class MetricsService implements OnModuleInit, OnModuleDestroy {
 
     // Set initial server uptime
     this.serverUptime.set(process.uptime());
+
+    // Collect default metrics
+    collectDefaultMetrics({ register: this.registry });
   }
 
   onModuleInit() {
     // Update server uptime every 10 seconds
     this.intervalId = setInterval(() => {
       this.updateServerUptime();
-    }, 10000) as unknown as number; // Cast to number
+    }, 10000) as unknown as number;
   }
 
   onModuleDestroy() {
