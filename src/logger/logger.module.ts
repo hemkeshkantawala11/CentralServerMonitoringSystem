@@ -5,4 +5,4 @@ import { CustomLogger } from './custom-logger.service';
   providers: [CustomLogger],
   exports: [CustomLogger],
 })
-export class LoggerModule {}
+export class CustomLoggerModule {}

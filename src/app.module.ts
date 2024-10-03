@@ -3,6 +3,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { BooksModule } from './books/books.module';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { MetricsModule } from './metrics/metrics.module';
+import { OutcomeController } from './books/outcome.controller';
+import { CustomLoggerModule } from './logger/logger.module';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -18,6 +20,8 @@ dotenv.config();
       },
     }),
     MetricsModule,
+    CustomLoggerModule, // Import CustomLoggerModule
   ],
+  controllers: [OutcomeController],
 })
 export class AppModule {}
